@@ -1,0 +1,132 @@
+<?php
+/**
+ * This will allow you to charge additional extras on the user's monthly membership fee.
+ * Copy the code below into your PMPro Customizations Plugin - https://www.paidmembershipspro.com/create-a-plugin-for-pmpro-customizations/
+ */
+ 
+ //we have to put everything in a function called on init, so we are sure Register Helper is loaded
+function my_pmprorh_init()
+{
+	//don't break if Register Helper is not loaded
+	if(!function_exists( 'pmprorh_add_registration_field' )) {
+		return false;
+	}
+	
+	//define the fields
+	$fields = array();
+	$fields[] = new PMProRH_Field(
+		'expert',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'Expert Writer Add $175/mo',		// custom field label
+			'levels'	=> array(1)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'research',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'SEO Research Add $95/mo',		// custom field label
+			'levels'	=> array(1)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'complete_upgrade',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'Both Expert and SEO Add $270/mo',		// custom field label
+			'levels'	=> array(1)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'expert_2',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'Expert Writer Add $200/mo',		// custom field label
+			'levels'	=> array(2)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'research_2',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'SEO Research Add $145/mo',		// custom field label
+			'levels'	=> array(2)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'complete_upgrade_2',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'Both Expert and SEO Add $350/mo',		// custom field label
+			'levels'	=> array(2)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'expert_3',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'Expert Writer Add $500/mo',		// custom field label
+			'levels'	=> array(3)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'research_3',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'SEO Research Add $700/mo',		// custom field label
+			'levels'	=> array(3)
+		)
+	);
+	$fields[] = new PMProRH_Field(
+		'complete_upgrade_3',						// input name, will also be used as meta key
+		'checkbox',							// type of field
+		array(
+			'label'		=> 'Both Expert and SEO Add $1200/mo',		// custom field label
+			'levels'	=> array(3)
+		)
+	);
+
+	
+	//add the fields into a new checkout_boxes are of the checkout page
+	foreach($fields as $field)
+		pmprorh_add_registration_field(
+			'checkout_boxes',				// location on checkout page
+			$field						// PMProRH_Field object
+		);
+	//that's it. see the PMPro Register Helper readme for more information and examples.
+}
+add_action( 'init', 'my_pmprorh_init' );
+function my_pmpro_checkout_level($level)
+{
+  if ( ! empty( $_REQUEST['expert'] ) ) {
+    // $level->initial_payment = $level->initial_payment + 175; //to update the initial payment.
+    $level->billing_amount = $level->billing_amount + 175;	//to update recurring payments too
+  }
+  if ( ! empty( $_REQUEST['research'] ) ) {
+    $level->billing_amount = $level->billing_amount + 95;	//to update recurring payments too
+  }
+  if ( ! empty( $_REQUEST['complete_upgrade'] ) ) {
+    $level->billing_amount = $level->billing_amount + 270;	//to update recurring payments too
+  }
+  if ( ! empty( $_REQUEST['expert_2'] ) ) {
+    $level->billing_amount = $level->billing_amount + 200;	//to update recurring payments too
+  }
+  if ( ! empty( $_REQUEST['research_2'] ) ) {
+    $level->billing_amount = $level->billing_amount + 145;	//to update recurring payments too
+  }
+   if ( ! empty( $_REQUEST['complete_upgrade_2'] ) ) {
+    $level->billing_amount = $level->billing_amount + 350;	//to update recurring payments too
+  }
+   if ( ! empty( $_REQUEST['expert_3'] ) ) {
+    $level->billing_amount = $level->billing_amount + 500;	//to update recurring payments too
+  }
+  if ( ! empty( $_REQUEST['research_3'] ) ) {
+    $level->billing_amount = $level->billing_amount + 700;	//to update recurring payments too
+  }
+   if ( ! empty( $_REQUEST['complete_upgrade_3'] ) ) {
+    $level->billing_amount = $level->billing_amount + 1200;	//to update recurring payments too
+  }
+  
+  return $level;
+}
